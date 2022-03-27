@@ -1,14 +1,10 @@
 // global variables for html elements
 var button = document.querySelector('.btn');
 var inputValue = document.querySelector('.inputValue');
-var title = document.querySelector('.name');
-var icon = document.querySelector('.icon');
-var temp = document.querySelector('.temp');
-var humidity = document.querySelector('.humidity');
-var wind = document.querySelector('.wind');
-var uv = document.querySelector('.uv');
+var name = document.querySelector('.name');
 var desc = document.querySelector('.desc');
-
+var temp = document.querySelector('.temp');
+var icon = document.querySelector('.icon');
 
 
 button.addEventListener('click', function () {
@@ -16,23 +12,17 @@ button.addEventListener('click', function () {
         .then(response => response.json())
         .then(data => {
             var nameValue = data['name'];
-            var iconUrl = 'http://openweathermap.org/img/wn/' + data['weather'][0]['icon'] + '@2x.png';
             var tempValue = data['main']['temp'];
-            var humidityValue = data['main']['humidity'];
-            var windValue = data['wind']['speed'];
-            var uviValue = data['uvi'];
             var descValue = data['weather'][0]['description'];
+            var iconValue = data['weather'][0]['icon'];
 
-            title.innerHTML = nameValue;
-            icon.InnerHTML = iconUrl.replace('@2x', data['weather'][0]['icon']);
+            name.innerHTML = nameValue;
             temp.innerHTML = tempValue;
-            humidity.innerHTML = humidityValue;
-            wind.innerHTML = windValue;
-            uv.innerHTML = uviValue;
             desc.innerHTML = descValue;
+            icon.innerHTML = iconValue;
         })
-        .catch(error => alert("wrong city name"));
-});
+        .catch(err => alert("wrong city name"))
+})
 // fetch('https://api.openweathermap.org/data/2.5/onecall?q=' + inputValue.value + ' &appid=1057c30581fce41e7df886393bc1cbde')
 //     .then(response => response.json())
 //     .then(data => console.log(data))
