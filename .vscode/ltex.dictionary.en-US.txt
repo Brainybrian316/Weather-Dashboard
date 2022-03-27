@@ -1,0 +1,10 @@
+javascript
+bg-gradient
+bg-primary
+container-md
+container-sm
+btn-primary
+btn
+OMhuP
+bg-warning
+postion-absolute-right
