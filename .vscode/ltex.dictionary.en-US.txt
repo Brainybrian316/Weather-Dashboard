@@ -12,3 +12,7 @@ crossorigin
 m-sm-auto
 Forcast
 ol
+uv
+desc
+img
+inputValue
