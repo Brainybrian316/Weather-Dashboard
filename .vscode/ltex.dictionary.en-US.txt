@@ -8,3 +8,4 @@ btn
 OMhuP
 bg-warning
 postion-absolute-right
+crossorigin
