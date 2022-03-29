@@ -1,4 +1,5 @@
 // global variables for html elements
+const apiKey = '1057c30581fce41e7df886393bc1cbde'
 var button = document.querySelector('.btn');
 var inputValue = document.querySelector('.inputValue');
 var title = document.querySelector('.name');
