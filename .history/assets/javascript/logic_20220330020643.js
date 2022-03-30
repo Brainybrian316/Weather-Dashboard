@@ -33,7 +33,7 @@ currentContainer = (current, elementId) => {
     const cityTemp = document.createElement('p');
     const cityWind = document.createElement('p');
     const cityHumidity = document.createElement('p');
-    const uvIndex = document.createElement('span');
+    const uvIndex = document.createElement('p');
 
     const cityDate = luxon.DateTime.local().toFormat('MM/dd/yyyy');
 
@@ -52,29 +52,29 @@ currentContainer = (current, elementId) => {
     weatherContainer.appendChild(uvIndex);
 
     //  uv index color change
-    switch (current.uvi) {
-        case current.uvi < 3:
-            uvIndex.setAttribute('style', 'color: white; background-color: green;');
-            break;
-        case current.uvi < 6:
-            uvIndex.setAttribute('style', 'color: white; background-color: yellow;');
-            break;
-        case current.uvi < 8:
-            uvIndex.setAttribute('style', 'color: white; background-color: orange;');
-            break;
-        case current.uvi < 11:
-            uvIndex.setAttribute('style', 'color: white; background-color: red;');
-            break;
-        case current.uvi > 11:
-            uvIndex.setAttribute('style', 'color: white; background-color: purple;');
-        default:
-            break;
-    }
     if (current.uvi < 3) {
-        uvIndex.setAttribute('style', 'color: white; background-color: green');
+        uvIndex.setAttribute('style', '<p>color: green; </p>');
 
     }
 };
+
+// //  change uvi <p> element color based on UV index
+// UviIndicator = uvi => {
+//     const uviColor = document.querySelector('.uvi');
+//     if (uvi < 3) {
+//         uviColor.style.backgroundColor = 'green';
+//     } else if (uvi > 3 && uvi < 6) {
+//         uviColor.style.backgroundColor = 'yellow';
+//     } else if (uvi > 6 && uvi < 8) {
+//         uviColor.style.backgroundColor = 'orange';
+//     } else if (uvi > 8 && uvi < 11) {
+//         uviColor.style.backgroundColor = 'red';
+//     } else {
+//         uviColor.style.backgroundColor = 'purple';
+//     }
+
+// }
+
 
 
 //  five day forecast oneCall API
@@ -93,7 +93,7 @@ fiveDayContainer = (daily, elementId) => {
     const dailyIndex = daily.length - 3;
 
     const header = document.createElement('h1');
-    header.setAttribute('style', 'padding-bottom: 10px, padding-top: 10px');
+    header.setAttribute('style', 'padding-bottom: 10px;');
     header.textContent = '5 Day Forecast: ';
     fiveDay.appendChild(header);
 
