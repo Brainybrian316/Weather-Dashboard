@@ -47,13 +47,13 @@ currentContainer = (current, elementId) => {
     weatherContainer.appendChild(uvIndex);
 };
 
-//  five day forecast oneCall API
+//  fetch five day forecast
 fiveDayForecast = data => {
-    var cityObj = data[0];
+    const cityObj = data[0];
     fetch('https://api.openweathermap.org/data/2.5/forecast?lat=' + cityObj.lat + '&lon=' + cityObj.lon + '&units=imperial&appid=' + apiKey)
         .then(response => response.json())
         .then(data => {
             fiveDayContainer(data.list, '#fiveDay');
-        })
-    console.log(data)
-}
+        });
+    console.log(data.list);
+};
