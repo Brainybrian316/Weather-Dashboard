@@ -64,19 +64,29 @@ fiveDayForecast = data => {
 fiveDayContainer = (daily, elementId) => {
     const fiveDay = document.querySelector(elementId);
     const dailyIndex = daily.length - 3;
+
+    const header = document.createElement('h1');
+    header.setAttribute('style', 'padding-bottom: 10px;');
+    header.textContent = '5 Day Forecast: ';
+    fiveDay.appendChild(header);
+
     for (let i = 0; i < dailyIndex; i++) {
 
-        const date = document.createElement('h3');
+
+        const date = document.createElement('h5');
         const dayTemp = document.createElement('p');
         const dayWind = document.createElement('p');
         const dayHumidity = document.createElement('p');
         const dateFuture = luxon.DateTime.local().plus({
             days: i + 1
         }).toFormat('MM/dd/yyyy');
+
+
         date.textContent = dateFuture
         dayTemp.textContent = 'Temp: ' + daily[i].temp.day;
         dayWind.textContent = 'Wind: ' + daily[i].wind_speed;
         dayHumidity.textContent = 'Humidity: ' + daily[i].humidity;
+
 
         fiveDay.appendChild(date);
         fiveDay.appendChild(dayTemp);
