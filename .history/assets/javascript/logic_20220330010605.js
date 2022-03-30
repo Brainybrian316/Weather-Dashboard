@@ -69,8 +69,9 @@ fiveDayContainer = (daily, elementId) => {
         const dayHumidity = document.createElement('p');
         const dateFuture = luxon.DateTime.local().plus({
             days: i + 1
-        }).toFormat('MM-dd-yyyy');
+        });
         date.textContent = dateFuture
+        // date.textContent = luxon.DateTime.fromSeconds(daily[i].dt).toFormat('MM-dd-yyyy');
         dayTemp.textContent = 'Temp: ' + daily[i].temp.day;
         dayWind.textContent = 'Wind: ' + daily[i].wind_speed;
         dayHumidity.textContent = 'Humidity: ' + daily[i].humidity;
