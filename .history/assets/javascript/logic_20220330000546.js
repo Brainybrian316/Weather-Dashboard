@@ -53,16 +53,14 @@ fiveDayForecast = data => {
     fetch('https://api.openweathermap.org/data/2.5/onecall?lat=' + cityObj.lat + '&lon=' + cityObj.lon + '&units=imperial&appid=' + apiKey).then(response => response.json())
         .then(data => {
             fiveDayContainer(data.daily, '#fiveDay');
-
+            console.log(data.daily);
         })
 }
 
 // five day forecast container
 fiveDayContainer = (daily, elementId) => {
     const fiveDay = document.querySelector(elementId);
-    const dailyIndex = daily.length - 3;
-    for (let i = 0; i < dailyIndex; i++) {
-
+    for (let i = 0; i < daily.length; i++) {
         const date = document.createElement('h3');
         const dayTemp = document.createElement('p');
         const dayWind = document.createElement('p');
@@ -79,3 +77,24 @@ fiveDayContainer = (daily, elementId) => {
         fiveDay.appendChild(dayHumidity);
     }
 }
+// // five day forecast container
+// fiveDayContainer = (list, elementId) => {
+//     const fiveDay = document.querySelector(elementId);
+//     for (let i = 0; i < list; i++) {
+//         const date = document.createElement('h2');
+//         const temp = document.createElement('p');
+//         const wind = document.createElement('p');
+//         const humidity = document.createElement('p');
+
+//         // date.textContent = moment(list[i].dt_txt).format('MM/DD/YYYY');
+//         temp.textContent = 'Temp: ' + list[i].main.temp;
+//         wind.textContent = 'Wind: ' + list[i].wind.speed;
+//         humidity.textContent = 'Humidity: ' + list[i].main.humidity;
+
+//         // append the elements to the container
+//         fiveDay.appendChild(date);
+//         fiveDay.appendChild(temp);
+//         fiveDay.appendChild(wind);
+//         fiveDay.appendChild(humidity);
+//     }
+// }
