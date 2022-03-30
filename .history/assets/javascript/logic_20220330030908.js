@@ -42,7 +42,6 @@ currentContainer = (current, elementId) => {
 
     // variables that create the current weather in the html div container 
     const cityName = document.createElement('h1');
-    const icon = document.createElement('img');
     const cityTemp = document.createElement('p');
     const cityWind = document.createElement('p');
     const cityHumidity = document.createElement('p');
@@ -51,9 +50,6 @@ currentContainer = (current, elementId) => {
     //  variable to get the current date
     const cityDate = luxon.DateTime.local().toFormat('MM/dd/yyyy');
 
-    //  reference icon image based on the weather condition
-    icon.src = 'http://openweathermap.org/img/wn/' + current.weather[0].icon + '@2x.png';
-
     //  converts the created elements  into weather conditions based on the data in the objects api named "current"
     cityName.textContent = inputValue.value + ' ( ' + cityDate + ' )';
     cityTemp.textContent = 'Temp: ' + current.temp;
@@ -61,11 +57,9 @@ currentContainer = (current, elementId) => {
     cityHumidity.textContent = 'Humidity: ' + current.humidity;
     uvIndex.textContent = 'UV Index: ' + current.uvi;
 
-    //  anonymous variable to hold the current weather conditions
-    const weatherContainer = document.querySelector(elementId);
-
     //  appends the elements to the html div container
-    weatherContainer.appendChild(cityName).appendChild(icon);
+    const weatherContainer = document.querySelector(elementId);
+    weatherContainer.appendChild(cityName);
     weatherContainer.appendChild(cityTemp);
     weatherContainer.appendChild(cityWind);
     weatherContainer.appendChild(cityHumidity);
@@ -122,7 +116,6 @@ fiveDayContainer = (daily, elementId) => {
 
         //  variables to create the elements for the five day forecast weather conditions
         const date = document.createElement('h5');
-        const icon = document.createElement('img');
         const dayTemp = document.createElement('p');
         const dayWind = document.createElement('p');
         const dayHumidity = document.createElement('p');
@@ -132,10 +125,6 @@ fiveDayContainer = (daily, elementId) => {
             days: i + 1
         }).toFormat('MM/dd/yyyy');
 
-        //  reference icon image based on the weather condition
-        icon.src = 'http://openweathermap.org/img/wn/' + daily[i].weather[0].icon + '@2x.png';
-        icon.style.width = '75px';
-
         //  converts the created elements into weather conditions based on the data in the objects api named "daily"
         date.textContent = dateFuture
         dayTemp.textContent = 'Temp: ' + daily[i].temp.day;
@@ -143,8 +132,7 @@ fiveDayContainer = (daily, elementId) => {
         dayHumidity.textContent = 'Humidity: ' + daily[i].humidity;
 
         //  appends the elements to the html div container
-        fiveDay.appendChild(date)
-        fiveDay.appendChild(icon);
+        fiveDay.appendChild(date);
         fiveDay.appendChild(dayTemp);
         fiveDay.appendChild(dayWind);
         fiveDay.appendChild(dayHumidity);
