@@ -26,16 +26,16 @@ oneCallApi = data => {
 
 currentContainer = (current, elementId) => {
     const cityName = document.createElement('h1');
-    const cityTemp = document.createElement('h5');
-    const cityWind = document.createElement('h5');
-    const cityHumidity = document.createElement('h5');
-    const uvIndex = document.createElement('h5');
+    const cityTemp = document.createElement('p');
+    const cityWind = document.createElement('p');
+    const cityHumidity = document.createElement('p');
+    const uvIndex = document.createElement('p');
 
     cityName.textContent = inputValue.value;
-    cityTemp.textContent = current.temp;
-    cityWind.textContent = current.wind_speed;
-    cityHumidity.textContent = current.humidity;
-    uvIndex.textContent = current.uvi;
+    cityTemp.textContent = 'Temp: ' + current.temp;
+    cityWind.textContent = 'Wind: ' + current.wind_speed;
+    cityHumidity.textContent = 'Humidity: ' + current.humidity;
+    uvIndex.textContent = 'UV Index: ' + current.uvi;
 
     const weatherContainer = document.querySelector(elementId);
     weatherContainer.appendChild(cityName);
