@@ -33,7 +33,10 @@ currentContainer = (current, elementId) => {
     const cityHumidity = document.createElement('p');
     const uvIndex = document.createElement('p');
 
-    cityName.textContent = inputValue.value;
+    const cityDate = luxon.DateTime.local().toFormat('MM/dd/yyyy');
+
+
+    cityName.textContent = inputValue.value + ' ( ' + cityDate + ' )';
     cityTemp.textContent = 'Temp: ' + current.temp;
     cityWind.textContent = 'Wind: ' + current.wind_speed;
     cityHumidity.textContent = 'Humidity: ' + current.humidity;
@@ -69,7 +72,7 @@ fiveDayContainer = (daily, elementId) => {
         const dayHumidity = document.createElement('p');
         const dateFuture = luxon.DateTime.local().plus({
             days: i + 1
-        }).toFormat('MM-dd-yyyy');
+        }).toFormat('MM/dd/yyyy');
         date.textContent = dateFuture
         dayTemp.textContent = 'Temp: ' + daily[i].temp.day;
         dayWind.textContent = 'Wind: ' + daily[i].wind_speed;
