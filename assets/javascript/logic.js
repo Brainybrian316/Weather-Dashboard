@@ -4,40 +4,45 @@ var button = document.querySelector('.btn');
 var inputValue = document.querySelector('.inputValue');
 
 
-geoCodeapi = event => {
+geoCodeApi = event => {
     event.preventDefault();
     fetch('http://api.openweathermap.org/geo/1.0/direct?q=' + inputValue.value + '&limit=1&appid=' + apiKey)
         .then(response => response.json())
         .then(data => {
-
+            oneCallApi(data);
         })
-}
+};
 
 button.addEventListener('click', geoCodeApi);
 
-var oneCallApi = function (data) {
-var cityObj = data[0];
+oneCallApi = data => {
+    var cityObj = data[0];
+    fetch('https://api.openweathermap.org/data/2.5/onecall?lat=' + cityObj.lat + '&lon=' + cityObj.lon + '&units=imperial&appid=' + apiKey)
+        .then(response => response.json())
+        .then(data => {
+            currentContainer(data.current, '#current');
+        })
 }
 
-// button.addEventListener('click', function () {
-//     fetch('https://api.openweathermap.org/data/2.5/weather?q=' + inputValue.value + '&appid=1057c30581fce41e7df886393bc1cbde&units=imperial')
-//         .then(response => response.json())
-//         .then(data => {
-//             var nameValue = data['name'];
-//             var iconUrl = 'http://openweathermap.org/img/wn/' + iconUrl + '10d@2x.png';
-//             var tempValue = data['main']['temp'];
-//             var humidityValue = data['main']['humidity'];
-//             var windValue = data['wind']['speed'];
-//             var uvValue = data['uv'];
-//             var descValue = data['weather'][0]['description'];
+currentContainer = (current, elementId) => {
+    const cityName = document.createElement('h1');
+    const cityTemp = document.createElement('h5');
+    const cityWind = document.createElement('h5');
+    const cityHumidity = document.createElement('h5');
+    const uvIndex = document.createElement('h5');
 
-//             title.innerHTML = nameValue;
-//             icon.innerHTML = iconUrl;
-//             temp.innerHTML = tempValue;
-//             humidity.innerHTML = humidityValue;
-//             wind.innerHTML = windValue;
-//             uv.innerHTML = uvValue;
-//             desc.innerHTML = descValue;
-//         })
-//         .catch(error => alert("wrong city name"));
-});
+    cityName.textContent = inputValue.value;
+    cityTemp.textContent = current.temp;
+    cityWind.textContent = current.wind_speed;
+    cityHumidity.textContent = current.humidity;
+    uvIndex.textContent = current.uvi;
+
+    const weatherContainer = document.querySelector(elementId);
+    weatherContainer.appendChild(cityName);
+    weatherContainer.appendChild(cityTemp);
+    weatherContainer.appendChild(cityWind);
+    weatherContainer.appendChild(cityHumidity);
+    weatherContainer.appendChild(uvIndex);
+
+
+}
