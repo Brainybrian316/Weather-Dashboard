@@ -164,10 +164,35 @@ fiveDayContainer = (daily, elementId) => {
     // loop to replace the old days with the new 
     for (let i = 0; i < dailyIndex; i++) {
 
-        //  variables from first loop to create the new looped elements
+        //  recreating variables from first loop to create the new looped elements
+        const date = document.createElement('h5');
+        const icon = document.createElement('img');
+        const dayTemp = document.createElement('p');
+        const dayWind = document.createElement('p');
+        const dayHumidity = document.createElement('p');
+        //  variable to display the future dates plus one. 
+        const dateFuture = luxon.DateTime.local().plus({
+            days: i + 1
+        }).toFormat('MM/dd/yyyy');
 
+        //  reference icon image based on the weather condition
+        icon.src = 'http://openweathermap.org/img/wn/' + daily[i].weather[0].icon + '@2x.png';
+        icon.style.width = '75px';
 
-    }
+        //  converts the created elements into weather conditions based on the data in the objects api named "daily"
+        date.textContent = dateFuture
+        dayTemp.textContent = 'Temp: ' + daily[i].temp.day;
+        dayWind.textContent = 'Wind: ' + daily[i].wind_speed;
+        dayHumidity.textContent = 'Humidity: ' + daily[i].humidity;
+
+        //  appends the elements to the html div container
+        fiveDay.appendChild(date)
+        fiveDay.appendChild(icon);
+        fiveDay.appendChild(dayTemp);
+        fiveDay.appendChild(dayWind);
+        fiveDay.appendChild(dayHumidity);
+
+    };
 }
 
 //  function to save the searched city to local storage
