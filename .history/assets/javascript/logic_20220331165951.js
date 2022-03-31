@@ -19,7 +19,6 @@ geoCodeApi = event => {
             fiveDayForecast(data);
             // calls save city function
             saveCity();
-
         })
 };
 
@@ -89,16 +88,7 @@ currentContainer = (current, elementId) => {
             uvIndex.setAttribute('style', 'color: white; background-color: purple;');
         default:
             uvIndex.setAttribute('style', 'color: white; background-color: green;');
-    };
-
-    // Replaces the searched city with the new city searched when the user searches for a different city
-    weatherContainer.textContent = '';
-    weatherContainer.appendChild(cityName).appendChild(icon);
-    weatherContainer.appendChild(cityTemp);
-    weatherContainer.appendChild(cityWind);
-    weatherContainer.appendChild(cityHumidity);
-    weatherContainer.appendChild(uvIndex);
-
+    }
 };
 
 
@@ -157,18 +147,8 @@ fiveDayContainer = (daily, elementId) => {
         fiveDay.appendChild(dayTemp);
         fiveDay.appendChild(dayWind);
         fiveDay.appendChild(dayHumidity);
-    };
-    // Replaces the 1st searched 5day forecast with the new 5day forecast when the user searches for a different city
-    fiveDay.textContent = '';
-    fiveDay.appendChild(header);
-    // loop to replace the old days with the new 
-    for (let i = 0; i < dailyIndex; i++) {
-
-        //  variables from first loop to create the new looped elements
-
-
     }
-}
+};
 
 //  function to save the searched city to local storage
 saveCity = () => {
@@ -191,13 +171,33 @@ saveCity = () => {
     //  event listener to remove the current searched city and replace it with the saved city
     cityButton.addEventListener('click', () => {
         inputValue.value = cityButton.textContent
-
-        // when the created button is clicked, the current weather and five day forecast will be updated
-        fetch('https://api.openweathermap.org/data/2.5/weather?q=' + inputValue.value + '&units=imperial&appid=' + apiKey).then(response => response.json())
-            .then(data => {
-                currentWeather(data, '#current');
-                fiveDayForecast(data, '#fiveDay');
-            })
+        getWeather();
 
     })
+};
+
+//  get Weather function to get the weather conditions for the searched city
+getWeather = () => {
+
+    //  variable to get the searched city from local storage
+    const city = localStorage.getItem('city');
+
+    //  fetch the weather conditions for the searched city
+    fetch('https://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=imperial&appid=' + apiKey).then(response => response.json())
+        .then(data => {
+
+            //  call the current weather conditions function
+            currentWeather(data, '#current');
+
+            //  call the five day forecast function
+            fiveDayForecast(data, '#fiveDay');
+
+            //  call the save city function
+            saveCity();
+
+            // call the uv index function
+            uvIndex(data, '#uvIndex');
+
+
+        })
 };

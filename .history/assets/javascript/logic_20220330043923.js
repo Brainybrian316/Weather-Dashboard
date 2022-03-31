@@ -17,9 +17,6 @@ geoCodeApi = event => {
 
             // call five day forecast api
             fiveDayForecast(data);
-            // calls save city function
-            saveCity();
-
         })
 };
 
@@ -76,6 +73,9 @@ currentContainer = (current, elementId) => {
 
     //  uv index if statement to change the color of the uv index based on the value
     switch (current.uvi) {
+        case current.uvi < 3:
+            uvIndex.setAttribute('style', 'color: white; background-color: green;');
+            break;
         case current.uvi < 6:
             uvIndex.setAttribute('style', 'color: white; background-color: yellow;');
             break;
@@ -88,17 +88,8 @@ currentContainer = (current, elementId) => {
         case current.uvi > 11:
             uvIndex.setAttribute('style', 'color: white; background-color: purple;');
         default:
-            uvIndex.setAttribute('style', 'color: white; background-color: green;');
-    };
-
-    // Replaces the searched city with the new city searched when the user searches for a different city
-    weatherContainer.textContent = '';
-    weatherContainer.appendChild(cityName).appendChild(icon);
-    weatherContainer.appendChild(cityTemp);
-    weatherContainer.appendChild(cityWind);
-    weatherContainer.appendChild(cityHumidity);
-    weatherContainer.appendChild(uvIndex);
-
+            break;
+    }
 };
 
 
@@ -157,47 +148,5 @@ fiveDayContainer = (daily, elementId) => {
         fiveDay.appendChild(dayTemp);
         fiveDay.appendChild(dayWind);
         fiveDay.appendChild(dayHumidity);
-    };
-    // Replaces the 1st searched 5day forecast with the new 5day forecast when the user searches for a different city
-    fiveDay.textContent = '';
-    fiveDay.appendChild(header);
-    // loop to replace the old days with the new 
-    for (let i = 0; i < dailyIndex; i++) {
-
-        //  variables from first loop to create the new looped elements
-
-
     }
 }
-
-//  function to save the searched city to local storage
-saveCity = () => {
-
-    //  variable to set the searched city to local storage
-    const city = localStorage.setItem('city', inputValue.value);
-
-    //  to create the elements to append to the search history container
-    const cityHistory = document.querySelector('.container');
-    const cityButton = document.createElement('button');
-
-    //  set the button text content to the searched city
-    cityButton.textContent = inputValue.value;
-    //  set attribute to button
-    cityButton.setAttribute('class', 'btn btn-primary');
-
-    // append history to container
-    cityHistory.appendChild(cityButton);
-
-    //  event listener to remove the current searched city and replace it with the saved city
-    cityButton.addEventListener('click', () => {
-        inputValue.value = cityButton.textContent
-
-        // when the created button is clicked, the current weather and five day forecast will be updated
-        fetch('https://api.openweathermap.org/data/2.5/weather?q=' + inputValue.value + '&units=imperial&appid=' + apiKey).then(response => response.json())
-            .then(data => {
-                currentWeather(data, '#current');
-                fiveDayForecast(data, '#fiveDay');
-            })
-
-    })
-};

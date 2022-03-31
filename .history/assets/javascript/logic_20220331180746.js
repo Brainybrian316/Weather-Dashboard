@@ -89,16 +89,7 @@ currentContainer = (current, elementId) => {
             uvIndex.setAttribute('style', 'color: white; background-color: purple;');
         default:
             uvIndex.setAttribute('style', 'color: white; background-color: green;');
-    };
-
-    // Replaces the searched city with the new city searched when the user searches for a different city
-    weatherContainer.textContent = '';
-    weatherContainer.appendChild(cityName).appendChild(icon);
-    weatherContainer.appendChild(cityTemp);
-    weatherContainer.appendChild(cityWind);
-    weatherContainer.appendChild(cityHumidity);
-    weatherContainer.appendChild(uvIndex);
-
+    }
 };
 
 
@@ -157,18 +148,8 @@ fiveDayContainer = (daily, elementId) => {
         fiveDay.appendChild(dayTemp);
         fiveDay.appendChild(dayWind);
         fiveDay.appendChild(dayHumidity);
-    };
-    // Replaces the 1st searched 5day forecast with the new 5day forecast when the user searches for a different city
-    fiveDay.textContent = '';
-    fiveDay.appendChild(header);
-    // loop to replace the old days with the new 
-    for (let i = 0; i < dailyIndex; i++) {
-
-        //  variables from first loop to create the new looped elements
-
-
     }
-}
+};
 
 //  function to save the searched city to local storage
 saveCity = () => {
