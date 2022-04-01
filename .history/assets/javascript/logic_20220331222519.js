@@ -17,12 +17,8 @@ geoCodeApi = event => {
 
             // call five day forecast api
             fiveDayForecast(data);
-
-            // calls store history function
-            storeHistory(inputValue.value);
-
-            // function to display the searched cities in the history object
-            displayHistory();
+            // calls save city function
+            saveCity();
 
         })
 };
@@ -199,26 +195,16 @@ fiveDayContainer = (daily, elementId) => {
     };
 }
 
-//  creates history object to store the searched cities
-const history = {
-    cities: []
-};
+//  create buttons for the search history
+createButtons = () => {
 
-// function to store the searched cities in the history object
-storeHistory = (city) => {
-    history.cities.push(city);
-    localStorage.setItem('history', JSON.stringify(history));
-}
+    //  variables to create the buttons for the search history
+    const searchHistory = document.querySelector('#searchHistory');
+    const button = document.createElement('button');
+    button.setAttribute('class', 'btn btn-primary');
+    button.setAttribute('id', 'searchHistoryButton');
+    button.textContent = 'Search History';
 
-// function to display the searched cities in the history object
-displayHistory = () => {
-    const historyList = document.querySelector('#history');
-    historyList.textContent = '';
-    for (let i = 0; i < history.cities.length; i++) {
-        const city = history.cities[i];
-        const historyButton = document.createElement('button');
-        historyButton.setAttribute('class', 'btn btn-primary');
-        historyButton.textContent = city;
-        historyList.appendChild(historyButton);
-    };
+    //  appends the button to the html div container
+    searchHistory.appendChild(button);
 }

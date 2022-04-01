@@ -17,12 +17,8 @@ geoCodeApi = event => {
 
             // call five day forecast api
             fiveDayForecast(data);
-
-            // calls store history function
-            storeHistory(inputValue.value);
-
-            // function to display the searched cities in the history object
-            displayHistory();
+            // calls save city function
+            saveCity();
 
         })
 };
@@ -199,26 +195,34 @@ fiveDayContainer = (daily, elementId) => {
     };
 }
 
-//  creates history object to store the searched cities
-const history = {
-    cities: []
+//  function to save the searched city to local storage
+saveCity = () => {
+
+    //  variable to set the searched city to local storage
+    const city = localStorage.setItem('city', inputValue.value);
+
+    //  to create the elements to append to the search history container
+    const cityHistory = document.querySelector('.container');
+    const cityButton = document.createElement('button');
+
+    //  set the button text content to the searched city
+    cityButton.textContent = inputValue.value;
+    //  set attribute to button
+    cityButton.setAttribute('class', 'btn btn-primary');
+
+    // append history to container
+    cityHistory.appendChild(cityButton);
+
+    //  event listener to remove the current searched city and replace it with the saved city
+    cityButton.addEventListener('click', () => {
+        inputValue.value = cityButton.textContent
+
+        // when the created button is clicked, the current weather and five day forecast will be updated
+        fetch('https://api.openweathermap.org/data/2.5/weather?q=' + inputValue.value + '&units=imperial&appid=' + apiKey).then(response => response.json())
+            .then(data => {
+                currentWeather(data, '#current');
+                fiveDayForecast(data, '#fiveDay');
+            })
+
+    })
 };
-
-// function to store the searched cities in the history object
-storeHistory = (city) => {
-    history.cities.push(city);
-    localStorage.setItem('history', JSON.stringify(history));
-}
-
-// function to display the searched cities in the history object
-displayHistory = () => {
-    const historyList = document.querySelector('#history');
-    historyList.textContent = '';
-    for (let i = 0; i < history.cities.length; i++) {
-        const city = history.cities[i];
-        const historyButton = document.createElement('button');
-        historyButton.setAttribute('class', 'btn btn-primary');
-        historyButton.textContent = city;
-        historyList.appendChild(historyButton);
-    };
-}
