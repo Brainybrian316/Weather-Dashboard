@@ -24,7 +24,6 @@ geoCodeApi = event => {
             // function to display the searched cities in the history object
             displayHistory();
 
-
         })
 };
 
@@ -233,9 +232,7 @@ displayHistory = () => {
         historyList.appendChild(historyButton);
 
         // event listener to get item from local storage and display the searched city
-        historyButton.addEventListener('click', () => {
-
-        });
+        historyButton.addEventListener('click', getAllConditions);
 
         // event listener to delete the searched city from the history list when the user clicks on the city in the history list
         historyButton.addEventListener('click', () => {
@@ -253,6 +250,6 @@ getAllConditions = () => {
             // call five day forecast function
             fiveDayForecast(data);
             //  current weather conditions
-            currentContainer(data);
+            currentWeather(data);
         })
 }
