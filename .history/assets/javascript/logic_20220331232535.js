@@ -206,34 +206,25 @@ const history = {
 
 // function to store the searched cities in the history object
 storeHistory = (city) => {
-    //  pushes the searched city into the history object
     history.cities.push(city);
-    // saves the history object to local storage
     localStorage.setItem('history', JSON.stringify(history));
 }
 
 // function to display the searched cities in the history object
 displayHistory = () => {
-
-    // variable to get the history object from local storage
     const historyList = document.querySelector('#history');
     historyList.textContent = '';
-
-    // loop to show the searched cities as buttons
     for (let i = 0; i < history.cities.length; i++) {
-
-        //  variable for the cities in the array
         const city = history.cities[i];
-
-        //  variable to create the button for the searched cities
         const historyButton = document.createElement('button');
         historyButton.setAttribute('class', 'btn btn-primary');
         historyButton.textContent = city;
         historyList.appendChild(historyButton);
-
         // event listener to get item from local storage and display the searched city
-        historyButton.addEventListener('click', getAllConditions);
-
+        historyButton.addEventListener('click', () => {
+            getWeather(city);
+            getFiveDayForecast(city);
+        });
         // event listener to delete the searched city from the history list when the user clicks on the city in the history list
         historyButton.addEventListener('click', () => {
             history.cities.splice(i, 1);
@@ -242,14 +233,3 @@ displayHistory = () => {
         })
     };
 };
-
-getAllConditions = () => {
-    fetch('http://api.openweathermap.org/geo/1.0/direct?q=' + inputValue.value + '&limit=1&appid=' + apiKey)
-        .then(response => response.json())
-        .then(data => {
-            // call five day forecast function
-            fiveDayForecast(data);
-            //  current weather conditions
-            currentWeather(data);
-        })
-}
