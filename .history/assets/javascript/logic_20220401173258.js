@@ -210,58 +210,9 @@ storeHistory = (city) => {
 
     //  pushes the searched city into the history object
     history.cities.push(city);
-
     // saves the history object to local storage
     localStorage.setItem('history', JSON.stringify(history));
-
-    // displays the history as a button in the history div container
-    const historyList = document.querySelector('#history');
-    historyList.textContent = '';
-
-    //  loop to display the history as a button
-    for (let i = 0; i < history.cities.length; i++) {
-
-        const historyButton = document.createElement('button');
-        historyButton.setAttribute('class', 'btn btn-primary');
-        historyButton.textContent = history.cities[i];
-        historyList.appendChild(historyButton);
-    };
-};
-
-//  function to get the searched city from local storage
-getHistory = () => {
-
-    //  variable to store the history object
-    const history = JSON.parse(localStorage.getItem('history'));
-
-    // displays the history as a button in the history div container
-    const historyList = document.querySelector('#history');
-    historyList.textContent = '';
-
-    //  loop to display the history as a button
-    for (let i = 0; i < history.cities.length; i++) {
-
-        const historyButton = document.createElement('button');
-        historyButton.setAttribute('class', 'btn btn-primary');
-        historyButton.textContent = history.cities[i];
-        historyList.appendChild(historyButton);
-    };
-
-    //  event listener for historyList to get weather data from currentWeather function and fiveDayForecast function
-    historyList.addEventListener('click', (event) => {
-        // currentWeather(event.target.textContent);
-        fiveDayForecast(event.target.textContent);
-
-    });
-};
-
-
-
-// function to get the searched city from local storage
-getHistory();
-
-
-
+}
 
 // // function to display the searched cities in the history object
 // displayHistory = () => {
@@ -295,3 +246,5 @@ getHistory();
 //         })
 //     };
 // };
+
+// when user clicks previously searched city, an updated forecast will be retrieved and displayed
