@@ -24,6 +24,9 @@ geoCodeApi = event => {
             // function to display the searched cities in the history object
             displayHistory();
 
+            // call get weather function
+            getWeather(inputValue.value);
+
         })
 };
 
@@ -220,5 +223,15 @@ displayHistory = () => {
         historyButton.setAttribute('class', 'btn btn-primary');
         historyButton.textContent = city;
         historyList.appendChild(historyButton);
+        // event listener to get item from local storage and display the searched city
+        historyButton.addEventListener('click', () => {
+            getWeather(city);
+        });
+        // event listener to delete the searched city from the history list when the user clicks on the city in the history list
+        historyButton.addEventListener('click', () => {
+            history.cities.splice(i, 1);
+            localStorage.setItem('history', JSON.stringify(history));
+            displayHistory();
+        })
     };
-}
+};
