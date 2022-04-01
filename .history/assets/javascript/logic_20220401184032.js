@@ -228,37 +228,43 @@ storeHistory = (city) => {
     };
 };
 
+//  function to get the searched city from local storage
+getHistory = () => {
 
-//  get value of history button when clicked and search for the city based on the text value of the button
-document.querySelector('#history').addEventListener('click', (e) => {
-    const city = e.target.textContent;
-    fetchWeather(city);
-});
+    //  variable to store the history object
+    const history = JSON.parse(localStorage.getItem('history'));
 
+    // displays the history as a button in the history div container
+    const historyList = document.querySelector('#history');
+    historyList.textContent = '';
 
+    //  loop to display the history as a button
+    for (let i = 0; i < history.cities.length; i++) {
 
-// //  function to get the searched city from local storage
-// getHistory = () => {
+        const historyButton = document.createElement('button');
+        historyButton.setAttribute('class', 'btn btn-primary');
+        historyButton.textContent = history.cities[i];
+        historyList.appendChild(historyButton);
+    };
 
-//     //  variable to store the history object
-//     const history = JSON.parse(localStorage.getItem('history'));
+    //  event listener for historyList to get weather data from currentWeather function and fiveDayForecast function
+    historyList.addEventListener('click', (event) => {
+        // currentWeather(event.target.textContent);
+        fiveDayForecast(event.target.textContent);
+        // clears the search input field
+        document.querySelector('#search').value = '';
+        // clears the history div container
+        historyList.textContent = '';
+        // clears the history object
+        history.cities = [];
+        // saves the history object to local storage
+        localStorage.setItem('history', JSON.stringify(history));
 
-//     // displays the history as a button in the history div container
-//     const historyList = document.querySelector('#history');
-//     historyList.textContent = '';
+    });
+};
 
-//     //  loop to display the history as a button
-//     for (let i = 0; i < history.cities.length; i++) {
-
-//         const historyButton = document.createElement('button');
-//         historyButton.setAttribute('class', 'btn btn-primary');
-//         historyButton.textContent = history.cities[i];
-//         historyList.appendChild(historyButton);
-//     }
-// };
-
-// // function to get the searched city from local storage
-// getHistory();
+// function to get the searched city from local storage
+getHistory();
 
 
 
