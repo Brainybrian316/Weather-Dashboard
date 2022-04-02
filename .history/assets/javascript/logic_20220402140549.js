@@ -21,7 +21,8 @@ geoCodeApi = event => {
             // calls store history function
             storeHistory(inputValue.value);
 
-
+            // // function to display the searched cities in the history object
+            // displayHistory();
 
 
         })
@@ -35,20 +36,19 @@ oneCallApi = data => {
 
     //   access's  the object in the api array 
     let cityObj = data[0];
-
     fetch('https://api.openweathermap.org/data/2.5/onecall?lat=' + cityObj.lat + '&lon=' + cityObj.lon + '&units=imperial&appid=' + apiKey)
         .then(response => response.json())
         .then(data => {
 
             //  calls current current weather for the searched city. 
-            currentContainer(data.current, '#current', cityObj.name);
+            currentContainer(data.current, '#current');
 
             displayHistory(data.current, '#current');
         })
 }
 
 // function to get weather conditions for the current day
-currentContainer = (current, elementId, city) => {
+currentContainer = (current, elementId) => {
 
     // variables that create the current weather in the html div container 
     const cityName = document.createElement('h1');
@@ -66,7 +66,7 @@ currentContainer = (current, elementId, city) => {
 
 
     //  converts the created elements  into weather conditions based on the data in the objects api named "current"
-    cityName.textContent = city + ' ( ' + cityDate + ' )';
+    cityName.textContent = inputValue.value + ' ( ' + cityDate + ' )';
     cityTemp.textContent = 'Temp: ' + current.temp;
     cityWind.textContent = 'Wind: ' + current.wind_speed;
     cityHumidity.textContent = 'Humidity: ' + current.humidity;
@@ -205,9 +205,8 @@ fiveDayContainer = (daily, elementId) => {
     };
 }
 
-
 //  creates history object to store the searched cities
-const history = JSON.parse(localStorage.getItem('history')) || {
+const history = {
     cities: []
 };
 
@@ -215,13 +214,23 @@ const history = JSON.parse(localStorage.getItem('history')) || {
 storeHistory = (city) => {
 
     //  pushes the searched city into the history object
-    history.cities.unshift(city);
+    history.cities.push(city);
 
     // saves the history object to local storage
     localStorage.setItem('history', JSON.stringify(history));
 
-    displayHistory();
+    // displays the history as a button in the history div container
+    const historyList = document.querySelector('#history');
+    historyList.textContent = '';
 
+    //  loop to display the history as a button
+    for (let i = 0; i < history.cities.length; i++) {
+
+        const historyButton = document.createElement('button');
+        historyButton.setAttribute('class', 'btn btn-primary');
+        historyButton.textContent = history.cities[i];
+        historyList.appendChild(historyButton);
+    };
 };
 
 // function to display the searched cities in the history object
@@ -231,16 +240,8 @@ displayHistory = () => {
     const historyList = document.querySelector('#history');
     historyList.textContent = '';
 
-    let length = history.cities.length
-
-    if (history.cities.length > 3) {
-        length = 3;
-    } else {
-        length = history.cities.length;
-    }
-
     // loop to show the searched cities as buttons
-    for (let i = 0; i < length; i++) {
+    for (let i = 0; i < history.cities.length; i++) {
 
         //  variable for the cities in the array
         const city = history.cities[i];
@@ -262,11 +263,21 @@ displayHistory = () => {
                     // calling the five day forecast for previously searched city
                     fiveDayForecast(data);
 
+                    const cityDate = luxon.DateTime.local().toFormat('MM/dd/yyyy');
+
+                    document.getElementById('cityName').innerText = historyButton.textContent + ' ( ' + cityDate + ' )';
+
+
+                    appendChild(historyButton.textContent);
                 });
 
         })
 
+        // // event listener to delete the searched city from the history list when the user clicks on the city in the history list
+        // historyButton.addEventListener('click', () => {
+        //     history.cities.splice(i, 1);
+        //     localStorage.setItem('history', JSON.stringify(history));
+        //     displayHistory();
+        // })
     };
 };
-
-displayHistory();
