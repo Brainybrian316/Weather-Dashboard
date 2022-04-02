@@ -42,6 +42,8 @@ oneCallApi = data => {
 
             //  calls current current weather for the searched city. 
             currentContainer(data.current, '#current');
+
+            displayHistory(data.current, '#current');
         })
 }
 
@@ -50,7 +52,8 @@ currentContainer = (current, elementId) => {
 
     // variables that create the current weather in the html div container 
     const cityName = document.createElement('h1');
-    const icon = document.createElement('img');
+    cityName.setAttribute('id', 'cityName');
+    const icon = document.createElement('img')
     const cityTemp = document.createElement('p');
     const cityWind = document.createElement('p');
     const cityHumidity = document.createElement('p');
@@ -58,9 +61,9 @@ currentContainer = (current, elementId) => {
 
     //  variable to get the current date
     const cityDate = luxon.DateTime.local().toFormat('MM/dd/yyyy');
-
     //  reference icon image based on the weather condition
     icon.src = 'http://openweathermap.org/img/wn/' + current.weather[0].icon + '@2x.png';
+
 
     //  converts the created elements  into weather conditions based on the data in the objects api named "current"
     cityName.textContent = inputValue.value + ' ( ' + cityDate + ' )';
@@ -115,6 +118,8 @@ fiveDayForecast = data => {
 
             // calling the five day forecast for the searched city
             fiveDayContainer(data.daily, '#fiveDay');
+
+            displayHistory(data.daily, '#fiveDay');
         })
 }
 
@@ -228,70 +233,47 @@ storeHistory = (city) => {
     };
 };
 
+// function to display the searched cities in the history object
+displayHistory = () => {
 
-//  get value of history button when clicked and search for the city based on the text value of the button
-document.querySelector('#history').addEventListener('click', (e) => {
-    const city = e.target.textContent;
-    fetchWeather(city);
-});
+    // variable to get the history object from local storage
+    const historyList = document.querySelector('#history');
+    historyList.textContent = '';
 
+    // loop to show the searched cities as buttons
+    for (let i = 0; i < history.cities.length; i++) {
 
+        //  variable for the cities in the array
+        const city = history.cities[i];
 
-// //  function to get the searched city from local storage
-// getHistory = () => {
+        //  variable to create the button for the searched cities
+        const historyButton = document.createElement('button');
+        historyButton.setAttribute('class', 'btn btn-primary');
+        historyButton.textContent = city;
+        historyList.appendChild(historyButton);
 
-//     //  variable to store the history object
-//     const history = JSON.parse(localStorage.getItem('history'));
+        // event listener to get item from local storage and display the searched city
+        historyButton.addEventListener('click', () => {
+            fetch('http://api.openweathermap.org/geo/1.0/direct?q=' + historyButton.textContent + '&limit=1&appid=' + apiKey)
+                .then(response => response.json())
+                .then(data => {
+                    const cityDate = luxon.DateTime.local().toFormat('MM/dd/yyyy');
 
-//     // displays the history as a button in the history div container
-//     const historyList = document.querySelector('#history');
-//     historyList.textContent = '';
-
-//     //  loop to display the history as a button
-//     for (let i = 0; i < history.cities.length; i++) {
-
-//         const historyButton = document.createElement('button');
-//         historyButton.setAttribute('class', 'btn btn-primary');
-//         historyButton.textContent = history.cities[i];
-//         historyList.appendChild(historyButton);
-//     }
-// };
-
-// // function to get the searched city from local storage
-// getHistory();
+                    document.getElementById('cityName').innerText = historyButton.textContent + ' ( ' + cityDate + ' )';
 
 
+                    appendChild(historyButton.textContent);
 
+                    oneCallApi(data);
+                    fiveDayForecast(data);
+                });
+        })
 
-// // function to display the searched cities in the history object
-// displayHistory = () => {
-
-//     // variable to get the history object from local storage
-//     const historyList = document.querySelector('#history');
-//     historyList.textContent = '';
-
-//     // loop to show the searched cities as buttons
-//     for (let i = 0; i < history.cities.length; i++) {
-
-//         //  variable for the cities in the array
-//         const city = history.cities[i];
-
-//         //  variable to create the button for the searched cities
-//         const historyButton = document.createElement('button');
-//         historyButton.setAttribute('class', 'btn btn-primary');
-//         historyButton.textContent = city;
-//         historyList.appendChild(historyButton);
-
-//         // event listener to get item from local storage and display the searched city
-//         historyButton.addEventListener('click', () => {
-
-//         });
-
-//         // event listener to delete the searched city from the history list when the user clicks on the city in the history list
-//         historyButton.addEventListener('click', () => {
-//             history.cities.splice(i, 1);
-//             localStorage.setItem('history', JSON.stringify(history));
-//             displayHistory();
-//         })
-//     };
-// };
+        // // event listener to delete the searched city from the history list when the user clicks on the city in the history list
+        // historyButton.addEventListener('click', () => {
+        //     history.cities.splice(i, 1);
+        //     localStorage.setItem('history', JSON.stringify(history));
+        //     displayHistory();
+        // })
+    };
+};
