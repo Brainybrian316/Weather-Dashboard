@@ -230,7 +230,6 @@ displayHistory = () => {
     const historyList = document.querySelector('#history');
     historyList.textContent = '';
 
-    // variable to 
     let length = history.cities.length
 
     if (history.cities.length > 3) {
