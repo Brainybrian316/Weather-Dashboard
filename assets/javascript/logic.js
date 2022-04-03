@@ -249,7 +249,7 @@ displayHistory = () => {
 
         // event listener to get item from local storage and display the searched city
         historyButton.addEventListener('click', () => {
-            fetch('http://api.openweathermap.org/geo/1.0/direct?q=' + historyButton.textContent + '&limit=1&appid=' + apiKey)
+            fetch('https://api.openweathermap.org/geo/1.0/direct?q=' + historyButton.textContent + '&limit=1&appid=' + apiKey)
                 .then(response => response.json())
                 .then(data => {
 
