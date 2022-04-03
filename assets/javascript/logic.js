@@ -8,7 +8,7 @@ geoCodeApi = event => {
     event.preventDefault();
 
     // fetches geo location
-    fetch('http://api.openweathermap.org/geo/1.0/direct?q=' + inputValue.value + '&limit=1&appid=' + apiKey)
+    fetch('https://api.openweathermap.org/geo/1.0/direct?q=' + inputValue.value + '&limit=1&appid=' + apiKey)
         .then(response => response.json())
         .then(data => {
 
@@ -20,10 +20,6 @@ geoCodeApi = event => {
 
             // calls store history function
             storeHistory(inputValue.value);
-
-
-
-
         })
 };
 
