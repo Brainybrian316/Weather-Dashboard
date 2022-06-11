@@ -19,7 +19,9 @@ geoCodeApi = event => {
             fiveDayForecast(data);
 
             // calls store history function
-            storeHistory(inputValue.value);
+            if (inputValue.value.trim() !== '' && !history.includes(inputValue.value.trim())) {
+            storeHistory(inputValue.value.trim());
+            }
         })
 };
 
@@ -124,10 +126,9 @@ fiveDayContainer = (daily, elementId) => {
 
     //  variables to create the five day forecast in the html div container
     const fiveDay = document.querySelector(elementId);
-    const header = document.createElement('h1');
-    header.setAttribute('style', 'padding-bottom: 10px, padding-top: 10px');
-    header.textContent = '5 Day Forecast: ';
-    fiveDay.appendChild(header);
+
+    // Replaces the 1st searched 5day forecast with the new 5day forecast when the user searches for a different city
+    fiveDay.innerHTML = '';
 
     //  variable for the loop to convert the 8 day forecast into a 5 day forecast
     const dailyIndex = daily.length - 3;
@@ -136,6 +137,8 @@ fiveDayContainer = (daily, elementId) => {
     for (let i = 0; i < dailyIndex; i++) {
 
         //  variables to create the elements for the five day forecast weather conditions
+        const fiveDayCard = document.createElement('article');
+        fiveDayCard.setAttribute('class', 'card m-2 col-md-3 col-lg-2');
         const date = document.createElement('h5');
         const icon = document.createElement('img');
         const dayTemp = document.createElement('p');
@@ -158,59 +161,57 @@ fiveDayContainer = (daily, elementId) => {
         dayHumidity.textContent = 'Humidity: ' + daily[i].humidity;
 
         //  appends the elements to the html div container
-        fiveDay.appendChild(date)
-        fiveDay.appendChild(icon);
-        fiveDay.appendChild(dayTemp);
-        fiveDay.appendChild(dayWind);
-        fiveDay.appendChild(dayHumidity);
+        fiveDay.appendChild(fiveDayCard)
+        fiveDayCard.appendChild(date)
+        fiveDayCard.appendChild(icon);
+        fiveDayCard.appendChild(dayTemp);
+        fiveDayCard.appendChild(dayWind);
+        fiveDayCard.appendChild(dayHumidity);
     };
-    // Replaces the 1st searched 5day forecast with the new 5day forecast when the user searches for a different city
-    fiveDay.textContent = '';
-    fiveDay.appendChild(header);
+
+
     // loop to replace the old days with the new 
-    for (let i = 0; i < dailyIndex; i++) {
+    // for (let i = 0; i < dailyIndex; i++) {
 
-        //  recreating variables from first loop to create the new looped elements
-        const date = document.createElement('h5');
-        const icon = document.createElement('img');
-        const dayTemp = document.createElement('p');
-        const dayWind = document.createElement('p');
-        const dayHumidity = document.createElement('p');
-        //  variable to display the future dates plus one. 
-        const dateFuture = luxon.DateTime.local().plus({
-            days: i + 1
-        }).toFormat('MM/dd/yyyy');
+    //     //  recreating variables from first loop to create the new looped elements
+    //     const date = document.createElement('h5');
+    //     const icon = document.createElement('img');
+    //     const dayTemp = document.createElement('p');
+    //     const dayWind = document.createElement('p');
+    //     const dayHumidity = document.createElement('p');
+    //     //  variable to display the future dates plus one. 
+    //     const dateFuture = luxon.DateTime.local().plus({
+    //         days: i + 1
+    //     }).toFormat('MM/dd/yyyy');
 
-        //  reference icon image based on the weather condition
-        icon.src = 'http://openweathermap.org/img/wn/' + daily[i].weather[0].icon + '@2x.png';
-        icon.style.width = '75px';
+    //     //  reference icon image based on the weather condition
+    //     icon.src = 'http://openweathermap.org/img/wn/' + daily[i].weather[0].icon + '@2x.png';
+    //     icon.style.width = '75px';
 
-        //  converts the created elements into weather conditions based on the data in the objects api named "daily"
-        date.textContent = dateFuture
-        dayTemp.textContent = 'Temp: ' + daily[i].temp.day;
-        dayWind.textContent = 'Wind: ' + daily[i].wind_speed;
-        dayHumidity.textContent = 'Humidity: ' + daily[i].humidity;
+    //     //  converts the created elements into weather conditions based on the data in the objects api named "daily"
+    //     date.textContent = dateFuture
+    //     dayTemp.textContent = 'Temp: ' + daily[i].temp.day;
+    //     dayWind.textContent = 'Wind: ' + daily[i].wind_speed;
+    //     dayHumidity.textContent = 'Humidity: ' + daily[i].humidity;
 
-        //  appends the elements to the html div container
-        fiveDay.appendChild(date)
-        fiveDay.appendChild(icon);
-        fiveDay.appendChild(dayTemp);
-        fiveDay.appendChild(dayWind);
-        fiveDay.appendChild(dayHumidity);
+    //     //  appends the elements to the html div container
+    //     fiveDay.appendChild(date)
+    //     fiveDay.appendChild(icon);
+    //     fiveDay.appendChild(dayTemp);
+    //     fiveDay.appendChild(dayWind);
+    //     fiveDay.appendChild(dayHumidity);
 
-    };
+    // };
 }
 
 //  creates history object to store the searched cities
-const history = JSON.parse(localStorage.getItem('history')) || {
-    cities: []
-};
+const history = JSON.parse(localStorage.getItem('history')) || [];
 
 // function to store the searched cities in the history object
 storeHistory = (city) => {
 
     //  pushes the searched city into the history object
-    history.cities.unshift(city);
+    history.unshift(city);
 
     // saves the history object to local storage
     localStorage.setItem('history', JSON.stringify(history));
@@ -227,23 +228,24 @@ displayHistory = () => {
     historyList.textContent = '';
 
     // variable to 
-    let length = history.cities.length
+    let length = history.length
 
-    if (history.cities.length > 3) {
+    if (history.length > 3) {
+        history.pop();
         length = 3;
     } else {
-        length = history.cities.length;
+        length = history.length;
     }
 
     // loop to show the searched cities as buttons
     for (let i = 0; i < length; i++) {
 
         //  variable for the cities in the array
-        const city = history.cities[i];
+        const city = history[i];
 
         //  variable to create the button for the searched cities
         const historyButton = document.createElement('button');
-        historyButton.setAttribute('class', 'btn btn-primary');
+        historyButton.setAttribute('class', 'btn btn-secondary m-2');
         historyButton.textContent = city;
         historyList.appendChild(historyButton);
 
@@ -259,9 +261,7 @@ displayHistory = () => {
                     fiveDayForecast(data);
 
                 });
-
         })
-
     };
 };
 
